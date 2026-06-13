@@ -1,0 +1,48 @@
+
+.chat-card-container {
+    display: flex;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.assistant-message {
+    justify-content: flex-start;
+}
+
+.chat-card {
+    min-width: 30%   ;
+    max-width: 80%;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-message .chat-card {
+    background-color: #007bff;
+    color: white;
+    border-bottom-right-radius: 0;
+}
+
+.assistant-message .chat-card {
+    background-color: #f8f9fa;
+    color: #333;
+    border-bottom-left-radius: 0;
+    border: 1px solid #dee2e6;
+}
+
+.chat-card-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.8;
+}
+
+.chat-card-content {
+    white-space: pre-wrap; /* Preserves line breaks from LLM */
+    word-wrap: break-word;
+}

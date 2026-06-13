@@ -1,0 +1,36 @@
+.Container {
+    border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+::deep .PromptForm {
+    display: flex;
+    align-items: center; 
+    gap: 12px;
+    width: 100%;
+    
+}
+
+::deep .ModelSelector{
+    width: auto;
+}
+
+::deep .UserInput {
+    padding: 8px; 
+    display:  inherit;
+    flex: 1; 
+    min-width: 0; 
+}
+
+
+.SvgIcons {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    stroke-width: 3px;
+    stroke: currentColor;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    fill: none;
+}

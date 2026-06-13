@@ -1,0 +1,66 @@
+@using LlmBase.Interfaces
+
+@inject ILlmServiceFactory llmServiceFactory
+@inject ChatService _chatService
+
+<p>hello</p>
+<div class="Container">
+    <EditForm class="PromptForm" Model="@promptData" FormName="PromptForm" OnValidSubmit="HandleSubmit">
+        
+        <button class="uploadButton" type="button">
+            <svg class="SvgIcons" viewBox="0 0 24 24">
+                <line x1="12" y1="0" x2="12" y2="24"></line>
+                <line x1="0" y1="12" x2="24" y2="12"></line>
+            </svg>
+        </button>
+
+        <InputText class="UserInput" id="UserInput" @bind-Value="promptData.UserInput"></InputText>
+
+        <InputSelect class="ModelSelector" @bind-Value="promptData.SelectedModelName" @bind-Value:after="@HandleModelChange">
+            <option value="">Select a model</option>
+            @foreach(ILlmService llmService in llmServiceFactory.Services)
+            {
+                <option>@llmService.ModelName</option>
+            }
+        </InputSelect>
+
+        <button class="sendButton" type="submit">
+            <svg class="SvgIcons" viewBox="0 0 24 24">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </button>
+        
+    </EditForm>
+</div>
+
+
+@code{
+    [Parameter]
+    public EventCallback<PromptData> OnPromptSubmitted {get;set;}
+    [Parameter,EditorRequired]
+    public PromptData promptData {get;set;}
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+    private async Task HandleSubmit()
+    {
+        if (promptData is not null && OnPromptSubmitted.HasDelegate)
+        {
+            await OnPromptSubmitted.InvokeAsync(promptData);
+            promptData.UserInput="";
+        }
+        
+    }
+
+    public void HandleModelChange()
+    {
+        if (!string.IsNullOrWhiteSpace(promptData.SelectedModelName))
+        {
+            _chatService.ChangeModel(promptData.SelectedModelName);
+        }
+
+    }
+}

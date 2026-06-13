@@ -1,0 +1,72 @@
+@page "/chat"
+@inject ChatService _chatService
+@implements IDisposable 
+<PageTitle>Chat</PageTitle>
+
+
+@if (_chatService.CurrentSession.Messages.Count==0)
+{
+    
+}
+else
+{
+    foreach(ChatInfo message in _chatService.CurrentSession.Messages)
+    {
+        <ChatMessageCard Role=message.Role SenderName="">
+            @message.Content
+        </ChatMessageCard>
+    }
+}
+
+<PromptTextBox OnPromptSubmitted="@HandleSendAsync" promptData="@promptData"></PromptTextBox>
+
+
+@code
+{
+    private bool _isStreaming;
+    private CancellationTokenSource? _cancellationTokenSource;
+
+    public PromptData promptData {get;set;} = new();
+
+
+    protected override void OnInitialized()
+    {
+        _chatService.OnChange += StateHasChanged;
+    }
+
+    private async Task HandleSendAsync()
+    {
+        if (string.IsNullOrWhiteSpace(promptData.UserInput) || _isStreaming)
+            return;
+        
+        _isStreaming = true;
+        StateHasChanged();
+        
+        _cancellationTokenSource = new ();
+        
+        try
+        {
+            await foreach (string _ in _chatService.StreamResponseForUserMessageAsync(promptData.UserInput))
+            {
+                StateHasChanged();
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Stream was cancelled
+        }
+        finally
+        {
+            _isStreaming = false;
+            _cancellationTokenSource?.Dispose();
+            StateHasChanged();
+        }
+    }
+
+
+
+    public void Dispose()
+    {
+        _chatService.OnChange-= StateHasChanged;
+    }
+}

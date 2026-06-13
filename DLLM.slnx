@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/UI/">
+    <Project Path="UI/DesktopApp/DesktopApp.csproj" />
+    <Project Path="UI/RazorClassLibrary/RazorClassLibrary.csproj" />
+    <Project Path="UI/WebAsm/WebAsm.csproj" />
+  </Folder>
+  <Project Path="LlmBase/LlmBase.csproj" />
+</Solution>

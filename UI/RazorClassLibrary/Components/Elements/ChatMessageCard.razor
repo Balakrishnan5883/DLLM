@@ -1,0 +1,39 @@
+
+
+<div class="chat-card-container @(Role == MessageRole.User ? "user-message" : "assistant-message")">
+    <div class="chat-card">
+        <div class="chat-card-header">
+            <span class="chat-card-sender">@SenderName</span>
+            @if (Timestamp.HasValue)
+            {
+                <span class="chat-card-time">@Timestamp.Value.ToString("HH:mm")</span>
+            }
+        </div>
+        <div class="chat-card-content">
+
+            @if(ChildContent is not null)
+            {
+                @ChildContent
+            }
+            
+        </div>
+    </div>
+</div>
+
+@code {
+
+
+    [Parameter]
+    public RenderFragment? ChildContent{get;set;}
+
+    [Parameter] 
+    public MessageRole Role { get; set; }
+
+    [Parameter] 
+    public string SenderName { get; set; } = "System";
+
+    [Parameter] 
+    public DateTime? Timestamp { get; set; }
+
+
+}
